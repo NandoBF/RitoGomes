@@ -1,5 +1,6 @@
 DONT FORGET TO INSTALL CASSIOPEIA
 
+PROJECT USING RIOTAPI.
 
-PROJECT USING RIOTAPI. Curretly only shows if participant 3 of Princess's last match won the game.
-
+Discord bot that has some interesting commands related to league of legends
+Extremely lacking in documentation
