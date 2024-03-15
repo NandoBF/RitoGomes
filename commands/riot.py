@@ -4,6 +4,13 @@ import cassiopeia as cass
 cass.set_riot_api_key("RGAPI-643a698f-9b32-4447-910f-298a777b7cdf")
 
 
+"""Function to get summoner given the RiotId and region"""
+def getSummoner(riotId, region):
+    return cass.get_summoner(name = riotId, region = region.upper())
+
+
+
+
 def showOffLevel(riotId, region):
     summoner = cass.get_summoner(name = riotId, region = region.upper())
     # summoner = cass.get_summoner(name = "serene hell", region="EUW")
@@ -20,11 +27,6 @@ def getMatch(riotId, region):
     summoner = cass.get_summoner(name = riotId, region = region.upper())
     last_match = summoner.match_history[0]
     player = last_match.participants[summoner]
-    # while i < 10:
-    #     if (last_match.participants[i].name == riotId):
-    #         player = last_match.participants[i]
-    #         break
-    #     else: i += 1
     double_kills = getDoubleKills(player.stats)
     triple_kills = getTripleKills(player.stats)
     quadra_kills = getQuadraKills(player.stats)
@@ -61,22 +63,30 @@ def hiddenStats(riotId, region):
     e_cast = getECount(player.stats)
     r_cast = getRCount(player.stats)
     time_dead = getTimeDead(player.stats)
-    return f'While playing **{player.champion.name}** you used:\nQ {q_cast} times\nW {w_cast} times\nE {e_cast} times\nR {r_cast} times\nAnd you spent **{time_dead}** seconds dead'
+    return (f'While playing **{player.champion.name}** you used:\nQ {q_cast} times\nW {w_cast} times\nE {e_cast} times\nR {r_cast} times\nAnd you spent **{time_dead}** seconds dead')
 
 def getQCount(stats):
     return stats.spell_1_casts
+
 def getWCount(stats):
     return stats.spell_2_casts
+
 def getECount(stats):
     return stats.spell_3_casts
+
 def getRCount(stats):
     return stats.spell_4_casts
+
 def getTimeDead(stats):
     return stats.total_time_spent_dead
 
 
+
+
+
 # DEBUGGING FUNCTIONS
-noti = hiddenStats("serene hell", "EUW")
+test_sum = getSummoner("serene hell", "euw")
+noti = test_sum.ranks
 print(noti)
 
     #

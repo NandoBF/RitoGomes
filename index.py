@@ -68,25 +68,24 @@ async def create_channel(ctx, channel_name):
 
 
 @bot.command(name='showLevel')
-async def showLevel(ctx, riotId:str, region:str):
+async def showLevel(ctx, riotId:str, region:str = "EUW"):
    level = riot.showOffLevel(riotId, region)
    if level > 500:
        await ctx.send(f'Behold! An account level **{level}**! TOUCH SOME GRASS')
-   else: await ctx.send(f'Account is level **{level}**')
+   else: await ctx.send(f' Account is level **{level}**')
 
 @bot.command(name='showId')
-@commands.has_role('Virgin')
-async def showId(ctx, riotId:str, region:str):
+async def showId(ctx, riotId:str, region:str = "EUW"):
     id = riot.showID(riotId, region)
     await ctx.send(f'Your id is: {id}.\n Dont show it to anyone pls')
 
 
 @bot.command(name='lastMatch')
-async def showMatch(ctx, riotId:str, region:str):
+async def showMatch(ctx, riotId:str, region:str = "EUW"):
     await ctx.send(riot.getMatch(riotId, region))
 
 @bot.command(name='hiddenStats')
-async def hidden(ctx, riotId:str, region:str):
+async def hidden(ctx, riotId:str, region:str = "EUW"):
     await ctx.send(riot.hiddenStats(riotId, region))
 
 
