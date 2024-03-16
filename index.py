@@ -23,7 +23,11 @@ intents.message_content = True
 bot = commands.Bot(command_prefix='!', intents = intents)
 
 
-
+def decideColor (win):
+    if (win):
+        return 0x0000FF #blue
+    else:
+        return 0xFF0000 #red
 
 @bot.event
 async def on_ready():
@@ -70,24 +74,50 @@ async def create_channel(ctx, channel_name):
 @bot.command(name='showLevel')
 async def showLevel(ctx, riotId:str, region:str = "EUW"):
    level = riot.showOffLevel(riotId, region)
+   print(f'{ctx.author} has requested a show of level')
    if level > 500:
        await ctx.send(f'Behold! An account level **{level}**! TOUCH SOME GRASS')
    else: await ctx.send(f' Account is level **{level}**')
+
+
+
 
 @bot.command(name='showId')
 async def showId(ctx, riotId:str, region:str = "EUW"):
     id = riot.showID(riotId, region)
     await ctx.send(f'Your id is: {id}.\n Dont show it to anyone pls')
 
+'''
+@bot.command(name='lastMatch1')
+async def showMatch1(ctx, riotId:str, region:str = "EUW"):
+    await ctx.send(riot.getMatch(riotId, region))
+'''
 
 @bot.command(name='lastMatch')
 async def showMatch(ctx, riotId:str, region:str = "EUW"):
-    await ctx.send(riot.getMatch(riotId, region))
+    summoner = riot.getSummoner(riotId, region)
+    summoner_matchstats = riot.lastMatchStat(summoner)
+    summary = riot.getMatch(summoner_matchstats)
+    color = decideColor(summoner_matchstats.stats.win)
+    # champ_image = summoner_matchstats.champion.skins[0].splash_url
+    champ_image = riot.getChampImage(summoner_matchstats.champion)
+    embed = discord.Embed(title="Your last match",
+                          description=summary,
+                          color=color)
+    await ctx.send(embed=embed.set_image(url = champ_image))
+
 
 @bot.command(name='hiddenStats')
 async def hidden(ctx, riotId:str, region:str = "EUW"):
-    await ctx.send(riot.hiddenStats(riotId, region))
-
+    summoner = riot.getSummoner(riotId, region)
+    summoner_matchstats = riot.lastMatchStat(summoner)
+    color = decideColor(summoner_matchstats.stats.win)
+    champ_image = riot.getChampImage(summoner_matchstats.champion)
+    summary = riot.hiddenStats(summoner_matchstats)
+    embed = discord.Embed(title="Hidden stats from last match",
+                          description=summary,
+                          color=color)
+    await ctx.send(embed=embed.set_image(url = champ_image))
 
 @bot.event
 async def on_command_error(ctx, error):
